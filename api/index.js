@@ -46,7 +46,7 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', cors(corsOptions), asy
 			'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
 		)
 
-		return res.send({
+		data = {
 			"buy_price": {
 				"amount_in": quantityLarge,
 				"amount_out": amountOutMin,
@@ -73,7 +73,9 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', cors(corsOptions), asy
 					"slippage":"\u003c 0.01%"
 				}
 			}
-		});
+		}
+
+		return res.send(JSON.stringify(data));
 	} catch (err) {
 		console.error(err)
 	}
