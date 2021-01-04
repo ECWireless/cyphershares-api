@@ -35,7 +35,7 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', cors(corsOptions), asy
 		const slippageTolerance = new Percent('1', '10000') // 50 bips, or 0.50%
 		const amountOutMin = (trade.minimumAmountOut(slippageTolerance).toFixed(18) * 10**18).toString()
 		const amountReadable = trade.minimumAmountOut(slippageTolerance).toFixed(18).toString()
-	
+		res.setHeader('Access-Control-Allow-Origin', '*')
 		return res.send({
 			"buy_price": {
 				"amount_in": quantityLarge,
