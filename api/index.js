@@ -7,7 +7,7 @@ const app = express();
 app.use(cors())
 
 var corsOptions = {
-	origin: 'http://localhost:3000',
+	origin: 'https://cyphershares-api.vercel.app',
 	optionsSuccessStatus: 200
   }
 
