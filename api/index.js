@@ -7,7 +7,7 @@ const app = express();
 app.use(cors())
 
 var corsOptions = {
-	origin: 'https://cyphershares-api.vercel.app',
+	origin: 'http://localhost:3000',
 	optionsSuccessStatus: 200
   }
 
@@ -36,7 +36,7 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', cors(corsOptions), asy
 		const amountOutMin = (trade.minimumAmountOut(slippageTolerance).toFixed(18) * 10**18).toString()
 		const amountReadable = trade.minimumAmountOut(slippageTolerance).toFixed(18).toString()
 
-		data = {
+		const data = {
 			"buy_price": {
 				"amount_in": quantityLarge,
 				"amount_out": amountOutMin,
@@ -65,7 +65,7 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', cors(corsOptions), asy
 			}
 		}
 
-		return res.send(JSON.stringify(data));
+		return res.send(data);
 	} catch (err) {
 		console.error(err)
 	}
