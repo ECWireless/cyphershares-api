@@ -25,7 +25,7 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', cors(), async (req, re
 		const deadline = Math.floor(Date.now() / 1000) + 60 * 20 // 20 minutes from the current Unix time
 		const slippageTolerance = new Percent('50', '10000'); // 50 bips, or 0.5%
 		const amountOut = (trade.outputAmount.toFixed(18) * 10**18).toString();
-		const amountReadable = trade.minimumAmountOut(slippageTolerance).toFixed(18).toString();
+		const amountReadable = trade.minimumAmountOut(slippageTolerance).toFixed(6).toString();
 
 		const data = {
 			"buy_price": {
@@ -78,7 +78,7 @@ app.get('/test', cors(), async (req, res) => {
 	const deadline = Math.floor(Date.now() / 1000) + 60 * 20 // 20 minutes from the current Unix time
 	const slippageTolerance = new Percent('50', '10000'); // 1 bips, or 0.5%
 	const amountOut = (trade.outputAmount.toFixed(18) * 10**18).toString();
-	const amountReadable = trade.minimumAmountOut(slippageTolerance).toFixed(5).toString();
+	const amountReadable = trade.minimumAmountOut(slippageTolerance).toFixed(6).toString();
 
 	console.log(amountOut)
 
