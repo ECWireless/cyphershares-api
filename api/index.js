@@ -46,6 +46,7 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', cors(), async (req, re
 				"gas_cost": "202776",
 				"gas_price": "20000000000",
 				"trade_type": "exact_in",
+				"slippage": slippageNumber,
 				"display": {
 					"from_quantity": quantity,
 					"from_token_price_usd": "$NA",
@@ -110,6 +111,7 @@ app.get('/api/sell_price/:quantity/:currency/:input_type', cors(), async (req, r
 				"deadline": deadline,
 				"gas_cost": "168892",
 				"gas_price": "1000000000",
+				"slippage": slippageNumber,
 				"display": {
 					"from_quantity": quantity,
 					"from_token_price_usd": "$NA",
