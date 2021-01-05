@@ -38,7 +38,6 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', cors(), async (req, re
 				"deadline": deadline,
 				"gas_cost": "202776",
 				"gas_price": "20000000000",
-				"slippage": "-0.006031912846003326964441243396256458922966089",
 				"trade_type": "exact_in",
 				"display": {
 					"from_quantity": quantity,
@@ -49,7 +48,7 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', cors(), async (req, re
 					"output_value_usd": "$NA",
 					"total_price_currency":"0.022619 ETH",
 					"total_price_usd":"$NA",
-					"gas_price_eth":"0.021619 ETH",
+					"gas_price_eth":"0.004056 ETH",
 					"gas_price_usd":"$NA",
 					"slippage":"\u003c 0.01%"
 				}
@@ -93,7 +92,6 @@ app.get('/test', cors(), async (req, res) => {
 			"deadline": deadline,
 			"gas_cost": "202776",
 			"gas_price": "20000000000",
-			"slippage": "-0.006031912846003326964441243396256458922966089",
 			"trade_type": "exact_in",
 			"display": {
 				"from_quantity": quantity,
@@ -104,7 +102,7 @@ app.get('/test', cors(), async (req, res) => {
 				"output_value_usd": "$NA",
 				"total_price_currency":"0.022619 ETH",
 				"total_price_usd":"$NA",
-				"gas_price_eth":"0.021619 ETH",
+				"gas_price_eth":"0.004056 ETH",
 				"gas_price_usd":"$NA",
 				"slippage":"\u003c 0.01%"
 			}
