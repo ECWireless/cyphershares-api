@@ -17,7 +17,7 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', cors(), async (req, re
 	
 		const WETH_ADDRESS = '0xd0A1E359811322d97991E03f863a0C30C2cF029C'
 		const CSDEFI_TOKEN_ADDRESS = '0xf9d50338Fb100B5a97e79615a8a912e10975b61c'
-	
+
 		const csDEFI = new Token(ChainId.KOVAN, CSDEFI_TOKEN_ADDRESS, 18);
 		const pair = await Fetcher.fetchPairData(csDEFI, WETH[csDEFI.chainId]);
 		const route = new Route([pair], WETH[csDEFI.chainId]);
@@ -26,6 +26,12 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', cors(), async (req, re
 		const slippageTolerance = new Percent('50', '10000'); // 50 bips, or 0.5%
 		const amountOut = (trade.outputAmount.toFixed(18) * 10**18).toString();
 		const amountReadable = trade.minimumAmountOut(slippageTolerance).toFixed(6).toString();
+		const slippageNumber = ((trade.executionPrice.toFixed(18) - trade.nextMidPrice.toFixed(18)) / trade.executionPrice.toFixed(18)).toFixed(2);
+		let slippage = `${slippageNumber.toString()}%`
+
+		if (slippageNumber < 0.01) {
+			slippage = "\u003c 0.01%";
+		}
 
 		const data = {
 			"buy_price": {
@@ -50,7 +56,7 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', cors(), async (req, re
 					"total_price_usd":"$NA",
 					"gas_price_eth":"0.004056 ETH",
 					"gas_price_usd":"$NA",
-					"slippage":"\u003c 0.01%"
+					"slippage": slippage
 				}
 			}
 		}
@@ -75,11 +81,15 @@ app.get('/test', cors(), async (req, res) => {
 	const route = new Route([pair], WETH[csDEFI.chainId]);
 	const trade = new Trade(route, new TokenAmount(WETH[csDEFI.chainId], quantityLarge), TradeType.EXACT_INPUT);
 	const deadline = Math.floor(Date.now() / 1000) + 60 * 20 // 20 minutes from the current Unix time
-	const slippageTolerance = new Percent('50', '10000'); // 1 bips, or 0.5%
+	const slippageTolerance = new Percent('50', '10000'); // 50 bips, or 0.5%
 	const amountOut = (trade.outputAmount.toFixed(18) * 10**18).toString();
 	const amountReadable = trade.minimumAmountOut(slippageTolerance).toFixed(6).toString();
+	const slippageNumber = ((trade.executionPrice.toFixed(18) - trade.nextMidPrice.toFixed(18)) / trade.executionPrice.toFixed(18)).toFixed(2);
+	let slippage = `${slippageNumber.toString()}%`
 
-	console.log(amountOut)
+	if (slippageNumber < 0.01) {
+		slippage = "\u003c 0.01%";
+	}
 
 	const data = {
 		"buy_price": {
@@ -104,7 +114,7 @@ app.get('/test', cors(), async (req, res) => {
 				"total_price_usd":"$NA",
 				"gas_price_eth":"0.004056 ETH",
 				"gas_price_usd":"$NA",
-				"slippage":"\u003c 0.01%"
+				"slippage": slippage
 			}
 		}
 	}
