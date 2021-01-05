@@ -26,7 +26,7 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', cors(), async (req, re
 		const slippageTolerance = new Percent('50', '10000'); // 50 bips, or 0.5%
 		const amountOut = (trade.outputAmount.toFixed(18) * 10**18).toString();
 		const amountReadable = trade.minimumAmountOut(slippageTolerance).toFixed(6).toString();
-		const slippageNumber = ((trade.executionPrice.toFixed(18) - trade.nextMidPrice.toFixed(18)) / trade.executionPrice.toFixed(18)).toFixed(2);
+		const slippageNumber = (((trade.executionPrice.toFixed(18) - trade.nextMidPrice.toFixed(18)) / trade.executionPrice.toFixed(18)).toFixed(5)) * 100;
 		let slippage = `${slippageNumber.toString()}%`
 
 		if (slippageNumber < 0.01) {
@@ -84,7 +84,7 @@ app.get('/test', cors(), async (req, res) => {
 	const slippageTolerance = new Percent('50', '10000'); // 50 bips, or 0.5%
 	const amountOut = (trade.outputAmount.toFixed(18) * 10**18).toString();
 	const amountReadable = trade.minimumAmountOut(slippageTolerance).toFixed(6).toString();
-	const slippageNumber = ((trade.executionPrice.toFixed(18) - trade.nextMidPrice.toFixed(18)) / trade.executionPrice.toFixed(18)).toFixed(2);
+	const slippageNumber = (((trade.executionPrice.toFixed(18) - trade.nextMidPrice.toFixed(18)) / trade.executionPrice.toFixed(18)).toFixed(5)) * 100;
 	let slippage = `${slippageNumber.toString()}%`
 
 	if (slippageNumber < 0.01) {
