@@ -3,9 +3,10 @@ var cors = require('cors');
 const { ChainId, Token, WETH, Trade, TokenAmount, TradeType, Fetcher, Percent, Route } = require('@uniswap/sdk')
 
 const app = express();
+app.use(cors())
 
 // BUY PRICE
-app.get('/api/buy_price/:quantity/:currency/:input_type', cors(), async (req, res) => {
+app.get('/api/buy_price/:quantity/:currency/:input_type', async (req, res) => {
 	try {
 		if (req.method === "OPTIONS") {
 			return res.status(200).end();
@@ -70,7 +71,7 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', cors(), async (req, re
 });
 
 // SELL PRICE
-app.get('/api/sell_price/:quantity/:currency/:input_type', cors(), async (req, res) => {
+app.get('/api/sell_price/:quantity/:currency/:input_type', async (req, res) => {
 	try {
 		if (req.method === "OPTIONS") {
 			return res.status(200).end();
