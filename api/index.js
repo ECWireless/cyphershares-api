@@ -109,8 +109,8 @@ app.get('/api/sell_price/:quantity/:currency/:input_type', cors(), async (req, r
 					WETH_ADDRESS
 				],
 				"deadline": deadline,
-				"gas_cost": "168892",
-				"gas_price": "1000000000",
+				"gas_cost": "168879",
+				"gas_price": "30000000000",
 				"slippage": slippageNumber,
 				"display": {
 					"from_quantity": quantity,
