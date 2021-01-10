@@ -13,7 +13,7 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', async (req, res) => {
 		}
 
 		const quantity = req.params.quantity
-		const quantityLarge = quantity * 10**18
+		const quantityLarge = (quantity * 10**18).toString()
 		// const currency = req.params.currency
 		// const input_type = req.params.input_type
 	
@@ -64,7 +64,6 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', async (req, res) => {
 				}
 			}
 		}
-		console.log(data)
 
 		return res.send(data);
 	} catch (err) {
@@ -80,7 +79,7 @@ app.get('/api/sell_price/:quantity/:currency/:input_type', async (req, res) => {
 		}
 
 		const quantity = req.params.quantity
-		const quantityLarge = quantity * 10**18
+		const quantityLarge = (quantity * 10**18).toString()
 		// const currency = req.params.currency
 		// const input_type = req.params.input_type
 	
@@ -105,7 +104,7 @@ app.get('/api/sell_price/:quantity/:currency/:input_type', async (req, res) => {
 
 		const data = {
 			"sell_price": {
-				"amount_in": quantityLarge.toString(),
+				"amount_in": quantityLarge,
 				"amount_out": amountOut,
 				"path": [
 					CSDEFI_TOKEN_ADDRESS,
