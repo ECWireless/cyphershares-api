@@ -1,5 +1,6 @@
 const express = require('express');
 var cors = require('cors');
+const BigNumber = require('bignumber.js');
 const { ChainId, Token, WETH, Trade, TokenAmount, TradeType, Fetcher, Percent, Route } = require('@uniswap/sdk')
 
 const app = express();
@@ -12,8 +13,8 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', async (req, res) => {
 			return res.status(200).end();
 		}
 
-		const quantity = req.params.quantity
-		const quantityLarge = (quantity * 10**18).toString()
+		const quantity = new BigNumber(req.params.quantity)
+		const quantityLarge = quantity.multipliedBy(new BigNumber(10).pow(18))
 		// const currency = req.params.currency
 		// const input_type = req.params.input_type
 	
@@ -26,9 +27,9 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', async (req, res) => {
 		const trade = new Trade(route, new TokenAmount(WETH[csDEFI.chainId], quantityLarge), TradeType.EXACT_INPUT);
 		const deadline = Math.floor(Date.now() / 1000) + 60 * 20 // 20 minutes from the current Unix time
 		const slippageTolerance = new Percent('50', '10000'); // 50 bips, or 0.5%
-		const amountOut = (trade.outputAmount.toFixed(18) * 10**18).toString();
-		const amountReadable = trade.minimumAmountOut(slippageTolerance).toFixed(6).toString();
-		const slippageNumber = (((trade.executionPrice.toFixed(18) - trade.nextMidPrice.toFixed(18)) / trade.executionPrice.toFixed(18)).toFixed(5)) * 100;
+		const amountOut = new BigNumber(trade.minimumAmountOut(slippageTolerance).toFixed()).multipliedBy(new BigNumber(10).pow(18))
+		const amountReadable = amountOut.dividedBy(new BigNumber(10).pow(18)).toFixed(6);
+		const slippageNumber = trade.priceImpact.toFixed(5)
 		let slippage = `${slippageNumber.toString()}%`
 
 
@@ -38,8 +39,8 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', async (req, res) => {
 
 		const data = {
 			"buy_price": {
-				"amount_in": quantityLarge,
-				"amount_out": amountOut,
+				"amount_in": quantityLarge.toString(),
+				"amount_out": amountOut.toString(),
 				"path": [
 					WETH_ADDRESS,
 					CSDEFI_TOKEN_ADDRESS
@@ -50,7 +51,7 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', async (req, res) => {
 				"trade_type": "exact_in",
 				"slippage": slippageNumber,
 				"display": {
-					"from_quantity": quantity,
+					"from_quantity": quantity.toString(),
 					"from_token_price_usd": "$NA",
 					"to_quantity": amountReadable,
 					"to_token_price_usd": "$NA",
@@ -78,8 +79,8 @@ app.get('/api/sell_price/:quantity/:currency/:input_type', async (req, res) => {
 			return res.status(200).end();
 		}
 
-		const quantity = req.params.quantity
-		const quantityLarge = (quantity * 10**18).toString()
+		const quantity = new BigNumber(req.params.quantity)
+		const quantityLarge = quantity.multipliedBy(new BigNumber(10).pow(18))
 		// const currency = req.params.currency
 		// const input_type = req.params.input_type
 	
@@ -93,9 +94,9 @@ app.get('/api/sell_price/:quantity/:currency/:input_type', async (req, res) => {
 
 		const deadline = Math.floor(Date.now() / 1000) + 60 * 20 // 20 minutes from the current Unix time
 		const slippageTolerance = new Percent('50', '10000'); // 50 bips, or 0.5%
-		const amountOut = (trade.outputAmount.toFixed(18) * 10**18).toString();
-		const amountReadable = trade.minimumAmountOut(slippageTolerance).toFixed(6).toString();
-		const slippageNumber = (((trade.executionPrice.toFixed(18) - trade.nextMidPrice.toFixed(18)) / trade.executionPrice.toFixed(18)).toFixed(5)) * 100;
+		const amountOut = new BigNumber(trade.minimumAmountOut(slippageTolerance).toFixed()).multipliedBy(new BigNumber(10).pow(18))
+		const amountReadable = amountOut.dividedBy(new BigNumber(10).pow(18)).toFixed(6);
+		const slippageNumber = trade.priceImpact.toFixed(5)
 		let slippage = `${slippageNumber.toString()}%`
 
 		if (slippageNumber < 0.01) {
@@ -104,8 +105,8 @@ app.get('/api/sell_price/:quantity/:currency/:input_type', async (req, res) => {
 
 		const data = {
 			"sell_price": {
-				"amount_in": quantityLarge,
-				"amount_out": amountOut,
+				"amount_in": quantityLarge.toString(),
+				"amount_out": amountOut.toString(),
 				"path": [
 					CSDEFI_TOKEN_ADDRESS,
 					WETH_ADDRESS
@@ -115,7 +116,7 @@ app.get('/api/sell_price/:quantity/:currency/:input_type', async (req, res) => {
 				"gas_price": "30000000000",
 				"slippage": slippageNumber,
 				"display": {
-					"from_quantity": quantity,
+					"from_quantity": quantity.toString(),
 					"from_token_price_usd": "$NA",
 					"to_quantity": amountReadable,
 					"to_token_price_usd": "$NA",

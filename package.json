@@ -8,6 +8,7 @@
   "license": "MIT",
   "dependencies": {
     "@uniswap/sdk": "^3.0.3",
+    "bignumber.js": "^9.0.1",
     "cors": "^2.8.5",
     "ethers": "^5.0.24",
     "express": "^4.17.1",
