@@ -31,13 +31,14 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', async (req, res) => {
 		const slippageNumber = (((trade.executionPrice.toFixed(18) - trade.nextMidPrice.toFixed(18)) / trade.executionPrice.toFixed(18)).toFixed(5)) * 100;
 		let slippage = `${slippageNumber.toString()}%`
 
+
 		if (slippageNumber < 0.01) {
 			slippage = "\u003c 0.01%";
 		}
 
 		const data = {
 			"buy_price": {
-				"amount_in": quantityLarge.toString(),
+				"amount_in": quantityLarge,
 				"amount_out": amountOut,
 				"path": [
 					WETH_ADDRESS,
@@ -63,6 +64,7 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', async (req, res) => {
 				}
 			}
 		}
+		console.log(data)
 
 		return res.send(data);
 	} catch (err) {
