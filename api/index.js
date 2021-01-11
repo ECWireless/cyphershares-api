@@ -17,6 +17,11 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', async (req, res) => {
 		const quantityLarge = quantity.multipliedBy(new BigNumber(10).pow(18))
 		// const currency = req.params.currency
 		// const input_type = req.params.input_type
+
+		if (quantityLarge.toString() === '0') {
+			res.status(400);
+			return res.send('Input invalid');
+		}
 	
 		const WETH_ADDRESS = '0xd0A1E359811322d97991E03f863a0C30C2cF029C'
 		const CSDEFI_TOKEN_ADDRESS = '0xf9d50338Fb100B5a97e79615a8a912e10975b61c'
@@ -69,6 +74,8 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', async (req, res) => {
 		return res.send(data);
 	} catch (err) {
 		console.error(err)
+		res.status(400);
+		return res.send('Input invalid');
 	}
 });
 
@@ -83,6 +90,11 @@ app.get('/api/sell_price/:quantity/:currency/:input_type', async (req, res) => {
 		const quantityLarge = quantity.multipliedBy(new BigNumber(10).pow(18))
 		// const currency = req.params.currency
 		// const input_type = req.params.input_type
+
+		if (quantityLarge.toString() === '0') {
+			res.status(400);
+			return res.send('Input invalid');
+		}
 	
 		const WETH_ADDRESS = '0xd0A1E359811322d97991E03f863a0C30C2cF029C'
 		const CSDEFI_TOKEN_ADDRESS = '0xf9d50338Fb100B5a97e79615a8a912e10975b61c'
@@ -134,6 +146,8 @@ app.get('/api/sell_price/:quantity/:currency/:input_type', async (req, res) => {
 		return res.send(data);
 	} catch (err) {
 		console.error(err)
+		res.status(400);
+		return res.send('Input invalid');
 	}
 });
 
