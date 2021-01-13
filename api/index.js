@@ -33,10 +33,10 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', async (req, res) => {
 		const deadline = Math.floor(Date.now() / 1000) + 60 * 20 // 20 minutes from the current Unix time
 		const slippageTolerance = new Percent('50', '10000'); // 50 bips, or 0.5%
 		const amountOut = new BigNumber(trade.minimumAmountOut(slippageTolerance).toFixed()).multipliedBy(new BigNumber(10).pow(18))
-		const amountReadable = amountOut.dividedBy(new BigNumber(10).pow(18)).toFixed(6);
-		const slippageNumber = trade.priceImpact.toFixed(5)
-		let slippage = `${slippageNumber.toString()}%`
-
+		const amountOutReadable = amountOut.dividedBy(new BigNumber(10).pow(18)).toFixed(4);
+		const amountOutEstimate = trade.outputAmount.toFixed(6);
+		const slippageNumber = trade.priceImpact.toFixed(5);
+		let slippage = `${slippageNumber.toString()}%`;
 
 		if (slippageNumber < 0.01) {
 			slippage = "\u003c 0.01%";
@@ -58,7 +58,8 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', async (req, res) => {
 				"display": {
 					"from_quantity": quantity.toString(),
 					"from_token_price_usd": "$NA",
-					"to_quantity": amountReadable,
+					"to_quantity_estimate": amountOutEstimate,
+					"to_quantity_minimum": amountOutReadable,
 					"to_token_price_usd": "$NA",
 					"input_value_usd": "$NA",
 					"output_value_usd": "$NA",
@@ -107,9 +108,10 @@ app.get('/api/sell_price/:quantity/:currency/:input_type', async (req, res) => {
 		const deadline = Math.floor(Date.now() / 1000) + 60 * 20 // 20 minutes from the current Unix time
 		const slippageTolerance = new Percent('50', '10000'); // 50 bips, or 0.5%
 		const amountOut = new BigNumber(trade.minimumAmountOut(slippageTolerance).toFixed()).multipliedBy(new BigNumber(10).pow(18))
-		const amountReadable = amountOut.dividedBy(new BigNumber(10).pow(18)).toFixed(6);
-		const slippageNumber = trade.priceImpact.toFixed(5)
-		let slippage = `${slippageNumber.toString()}%`
+		const amountOutReadable = amountOut.dividedBy(new BigNumber(10).pow(18)).toFixed(4);
+		const amountOutEstimate = trade.outputAmount.toFixed(6);
+		const slippageNumber = trade.priceImpact.toFixed(5);
+		let slippage = `${slippageNumber.toString()}%`;
 
 		if (slippageNumber < 0.01) {
 			slippage = "\u003c 0.01%";
@@ -130,7 +132,8 @@ app.get('/api/sell_price/:quantity/:currency/:input_type', async (req, res) => {
 				"display": {
 					"from_quantity": quantity.toString(),
 					"from_token_price_usd": "$NA",
-					"to_quantity": amountReadable,
+					"to_quantity_estimate": amountOutEstimate,
+					"to_quantity_minimum": amountOutReadable,
 					"to_token_price_usd": "$NA",
 					"input_value_usd": "$NA",
 					"output_value_usd": "$NA",
