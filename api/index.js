@@ -1,16 +1,21 @@
-const express = require('express');
-var cors = require('cors');
 const BigNumber = require('bignumber.js');
-const { ChainId, Token, WETH, Trade, TokenAmount, TradeType, Fetcher, Percent, Route } = require('@uniswap/sdk');
 const CoinMarketCap = require('coinmarketcap-api');
+const cors = require('cors');
 const dotenv = require('dotenv');
+const express = require('express');
+const { ChainId, Token, WETH, Trade, TokenAmount, TradeType, Fetcher, Percent, Route } = require('@uniswap/sdk');
+
 dotenv.config();
-
 const app = express();
-app.use(cors())
+app.use(cors());
 
-const apiKey = process.env.COIN_MARKET_CAP_API
-const client = new CoinMarketCap(apiKey)
+// Initialize CoinMarketCap
+const apiKey = process.env.COIN_MARKET_CAP_API;
+const client = new CoinMarketCap(apiKey);
+
+// Token Addresses
+const WETH_ADDRESS = '0xd0A1E359811322d97991E03f863a0C30C2cF029C'
+const CSDEFI_TOKEN_ADDRESS = '0xf9d50338Fb100B5a97e79615a8a912e10975b61c'
 
 // BUY PRICE
 app.get('/api/buy_price/:quantity/:currency/:input_type', async (req, res) => {
@@ -28,10 +33,8 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', async (req, res) => {
 			res.status(400);
 			return res.send('Input invalid');
 		}
-	
-		const WETH_ADDRESS = '0xd0A1E359811322d97991E03f863a0C30C2cF029C'
-		const CSDEFI_TOKEN_ADDRESS = '0xf9d50338Fb100B5a97e79615a8a912e10975b61c'
 
+		// Uniswap Info
 		const csDEFI = new Token(ChainId.KOVAN, CSDEFI_TOKEN_ADDRESS, 18);
 		const pair = await Fetcher.fetchPairData(csDEFI, WETH[csDEFI.chainId]);
 		const route = new Route([pair], WETH[csDEFI.chainId]);
@@ -43,10 +46,18 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', async (req, res) => {
 		const amountOutEstimate = trade.outputAmount.toFixed(6);
 		const slippageNumber = trade.priceImpact.toFixed(5);
 		let slippage = `${slippageNumber.toString()}%`;
-
 		if (slippageNumber < 0.01) {
 			slippage = "\u003c 0.01%";
 		}
+
+		// CoinMarketCap Info
+		const ethUsdPrice = await client.getQuotes({id: 1027})
+		.then(data => {
+			const ethPrice = data.data['1027'].quote.USD.price
+			return ethPrice.toFixed(2)
+		})
+		.catch(console.error);
+		const inputValueUSD = Number(quantity.toString()) * ethUsdPrice
 
 		const data = {
 			"buy_price": {
@@ -63,12 +74,12 @@ app.get('/api/buy_price/:quantity/:currency/:input_type', async (req, res) => {
 				"slippage": slippageNumber,
 				"display": {
 					"from_quantity": quantity.toString(),
-					"from_token_price_usd": "$NA",
+					"from_token_price_usd": `$NA`,
 					"to_quantity_estimate": amountOutEstimate,
 					"to_quantity_minimum": amountOutReadable,
 					"to_token_price_usd": "$NA",
-					"input_value_usd": "$NA",
-					"output_value_usd": "$NA",
+					"input_value_usd": `$${inputValueUSD.toFixed(2)}`,
+					"output_value_usd": `$${inputValueUSD.toFixed(2)}`,
 					"total_price_currency":"0.022619 ETH",
 					"total_price_usd":"$NA",
 					"gas_price_eth":"0.004056 ETH",
@@ -102,10 +113,8 @@ app.get('/api/sell_price/:quantity/:currency/:input_type', async (req, res) => {
 			res.status(400);
 			return res.send('Input invalid');
 		}
-	
-		const WETH_ADDRESS = '0xd0A1E359811322d97991E03f863a0C30C2cF029C'
-		const CSDEFI_TOKEN_ADDRESS = '0xf9d50338Fb100B5a97e79615a8a912e10975b61c'
 
+		// Uniswap Info
 		const csDEFI = new Token(ChainId.KOVAN, CSDEFI_TOKEN_ADDRESS, 18);
 		const pair = await Fetcher.fetchPairData(WETH[csDEFI.chainId], csDEFI);
 		const route = new Route([pair], csDEFI);
@@ -118,10 +127,18 @@ app.get('/api/sell_price/:quantity/:currency/:input_type', async (req, res) => {
 		const amountOutEstimate = trade.outputAmount.toFixed(6);
 		const slippageNumber = trade.priceImpact.toFixed(5);
 		let slippage = `${slippageNumber.toString()}%`;
-
 		if (slippageNumber < 0.01) {
 			slippage = "\u003c 0.01%";
 		}
+
+		// CoinMarketCapInfo
+		const ethUsdPrice = await client.getQuotes({id: 1027})
+		.then(data => {
+			const ethPrice = data.data['1027'].quote.USD.price
+			return ethPrice.toFixed(2)
+		})
+		.catch(console.error);
+		const inputValueUSD = Number(amountOutEstimate) * ethUsdPrice
 
 		const data = {
 			"sell_price": {
@@ -141,8 +158,8 @@ app.get('/api/sell_price/:quantity/:currency/:input_type', async (req, res) => {
 					"to_quantity_estimate": amountOutEstimate,
 					"to_quantity_minimum": amountOutReadable,
 					"to_token_price_usd": "$NA",
-					"input_value_usd": "$NA",
-					"output_value_usd": "$NA",
+					"input_value_usd": `$${inputValueUSD.toFixed(2)}`,
+					"output_value_usd": `$${inputValueUSD.toFixed(2)}`,
 					"total_price_currency":"0.022619 ETH",
 					"total_price_usd":"$NA",
 					"gas_price_eth":"0.000169 ETH",
@@ -159,15 +176,6 @@ app.get('/api/sell_price/:quantity/:currency/:input_type', async (req, res) => {
 		return res.send('Input invalid');
 	}
 });
-
-app.get('/price', async (req, res) => {
-	client.getQuotes({id: 1027})
-	.then(data => {
-		const ethPrice = data.data['1027'].quote.USD.price
-		return res.send(`Eth price is $${ethPrice.toFixed(2)}`)
-	})
-	.catch(console.error);
-})
 
 app.listen(process.env.PORT || 3001, () =>
   console.log(`Listening on port 3001!`),
