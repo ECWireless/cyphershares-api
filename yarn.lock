@@ -566,6 +566,14 @@ clone-response@^1.0.2:
   dependencies:
     mimic-response "^1.0.0"
 
+coinmarketcap-api@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/coinmarketcap-api/-/coinmarketcap-api-3.1.1.tgz#ee5660a7e18abd03cd84d80c79a6d7ab48817e6d"
+  integrity sha512-fXTJq3YyiI54m9W0T5CwxQAKEpZqXRZdKbb10Zld/vINfdM83Y8so+m6RVWoJktl8tMIAxCtkVVC5aGwSs1keQ==
+  dependencies:
+    node-fetch "^2.6.0"
+    qs "^6.7.0"
+
 color-convert@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-2.0.1.tgz#72d3a68d598c9bdb3af2ad1e84f21d896abd4de3"
@@ -682,6 +690,11 @@ dot-prop@^5.2.0:
   integrity sha512-QM8q3zDe58hqUqjraQOmzZ1LIH9SWQJTlEKCH4kJ2oQvLZk7RbQXvtDM2XEq3fwkV9CCvvH4LA0AV+ogFsBM2Q==
   dependencies:
     is-obj "^2.0.0"
+
+dotenv@^8.2.0:
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
+  integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
 
 duplexer3@^0.1.4:
   version "0.1.4"
@@ -1213,6 +1226,11 @@ negotiator@0.6.2:
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.2.tgz#feacf7ccf525a77ae9634436a64883ffeca346fb"
   integrity sha512-hZXc7K2e+PgeI1eDBe/10Ard4ekbfrrqG8Ep+8Jmf4JID2bNg7NvCPOZN+kfF574pFQI7mum2AUqDidoKqcTOw==
 
+node-fetch@^2.6.0, node-fetch@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
+  integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
+
 nodemon@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-2.0.6.tgz#1abe1937b463aaf62f0d52e2b7eaadf28cc2240d"
@@ -1332,6 +1350,11 @@ qs@6.7.0:
   version "6.7.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.7.0.tgz#41dc1a015e3d581f1621776be31afb2876a9b1bc"
   integrity sha512-VCdBRNFTX1fyE7Nb6FYoURo/SPe62QCaAyzJvUjwRaIsc+NePBEniHlvxFmmX56+HZphIGtV0XeCirBtpDrTyQ==
+
+qs@^6.7.0:
+  version "6.9.5"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.5.tgz#45859f731392198fbd3f91ea4290e7c4e25232fa"
+  integrity sha512-T0SnbxGiMcB09qd3bFcPt8rufxPs7T7TjePk33r1WsJNt12/rWsK/ofKqRHQ0rY/iMGE0mVdkc6Yg9CuL/ty0Q==
 
 range-parser@~1.2.1:
   version "1.2.1"

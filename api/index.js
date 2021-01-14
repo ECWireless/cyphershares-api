@@ -1,10 +1,16 @@
 const express = require('express');
 var cors = require('cors');
 const BigNumber = require('bignumber.js');
-const { ChainId, Token, WETH, Trade, TokenAmount, TradeType, Fetcher, Percent, Route } = require('@uniswap/sdk')
+const { ChainId, Token, WETH, Trade, TokenAmount, TradeType, Fetcher, Percent, Route } = require('@uniswap/sdk');
+const CoinMarketCap = require('coinmarketcap-api');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const app = express();
 app.use(cors())
+
+const apiKey = process.env.COIN_MARKET_CAP_API
+const client = new CoinMarketCap(apiKey)
 
 // BUY PRICE
 app.get('/api/buy_price/:quantity/:currency/:input_type', async (req, res) => {
@@ -153,6 +159,15 @@ app.get('/api/sell_price/:quantity/:currency/:input_type', async (req, res) => {
 		return res.send('Input invalid');
 	}
 });
+
+app.get('/price', async (req, res) => {
+	client.getQuotes({id: 1027})
+	.then(data => {
+		const ethPrice = data.data['1027'].quote.USD.price
+		return res.send(`Eth price is $${ethPrice.toFixed(2)}`)
+	})
+	.catch(console.error);
+})
 
 app.listen(process.env.PORT || 3001, () =>
   console.log(`Listening on port 3001!`),
